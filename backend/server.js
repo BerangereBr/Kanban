@@ -2,15 +2,22 @@ import express from 'express';
 import helmet from 'helmet';
 import cors from 'cors';
 import http from 'http';
+import dotenv from 'dotenv';
+import routeKanban from './routes/routeKanban.js';
+import './config/db.js';
+
+dotenv.config()
 
 const app = express();
+const corsOption = {
+    origin: process.env.FRONT_URL,
+    methods: ['GET', 'POST', 'PUT', 'DELETE'],
+}
+
 app.use(express.json());
 app.use(helmet());
-app.use(cors());
-
-app.get('/', (req, res) => {
-    res.json({ message: 'Bienvenue sur mon serveur' });
-});
+app.use(cors(corsOption));
+app.use('/api', routeKanban);
 
 function normalizePort(val) {
     const port = parseInt(val, 10);
