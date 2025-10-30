@@ -1,0 +1,47 @@
+@use './variables.scss';
+
+.btn-new-column {
+    border-radius: variables.$btn;
+    background-color: transparent;
+    border: 2px solid variables.$solid-color;
+    cursor: pointer;
+
+    &:hover {
+        background-color: variables.$solid-color;
+        color: white;
+    }
+}
+
+.btn {
+    border-radius: variables.$btn;
+    background-color: white;
+    border: 2px solid variables.$solid-color;
+    cursor: pointer;
+
+    &:hover {
+        background-color: variables.$solid-color;
+        color: white;
+    }
+}
+
+.container-column {
+    display: flex;
+    flex-direction: row;
+    gap: 20px;
+}
+
+.column {
+    display: flex;
+    flex-direction: column;
+    background-color: variables.$interactive-color;
+    border-radius: variables.$border-radius;
+    min-height: 500px;
+    padding: 20px;
+}
+
+.cards {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    margin-top: 20px;
+}
