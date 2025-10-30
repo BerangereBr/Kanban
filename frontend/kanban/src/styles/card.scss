@@ -1,0 +1,12 @@
+@use './variables.scss';
+
+.card {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    background-color: variables.$bg-color;
+    border-radius: variables.$border-radius;
+    padding: 20px;
+
+}

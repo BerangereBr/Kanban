@@ -1,6 +1,10 @@
+import '../styles/header.scss'
+
 function Header() {
     return (
-        <h1>Kanban</h1>
+        <header>
+            <h1 className="title">Kanban</h1>
+        </header>
     )
 }
 export default Header

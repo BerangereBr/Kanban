@@ -1,11 +1,15 @@
 import { useEffect, useState } from "react"
 import Card from "./Card";
+import Modal from "./Modal";
+import '../styles/column.scss'
 
 function Column() {
     const [columns, setColumns] = useState([]);
     const [cards, setCards] = useState([]);
     const [newColumn, setNewColumn] = useState('');
     const [newCard, setNewCard] = useState({});
+    const [modalOpenColumn, setOpenModalColumn] = useState(false);
+    const [modalOpenCard, setOpenModalCard] = useState(null);
 
     useEffect(() => {
         fetch('http://localhost:4000/api/column')
@@ -27,6 +31,7 @@ function Column() {
         const col = await res.json();
         setColumns(prev => [...prev, col]);
         setNewColumn('');
+        setOpenModalColumn(false);
     };
 
     const createCard = async (columnId) => {
@@ -39,10 +44,11 @@ function Column() {
         const card = await res.json();
         setCards(prev => [...prev, card]);
         setNewCard(prev => ({ ...prev, [columnId]: '' }))
+        setOpenModalCard(false);
     }
 
     const updateColumn = async (id) => {
-        const newName = prompt('Nouveau nom :');
+        const newName = prompt('nouveau nom :');
         if (!newName) return;
         const res = await fetch(`http://localhost:4000/api/column/${id}`, {
             method: 'PUT',
@@ -78,32 +84,44 @@ function Column() {
     }
     return (
         <>
-            <input value={newColumn} onChange={e => setNewColumn(e.target.value)} ></input>
-            <button onClick={createColumn}>Ajouter</button>
-            {columns.map(column => (
-                <div key={column.id}>
-                    <h2>{column.name}</h2>
-                    <button onClick={() => updateColumn(column.id)}>modifier</button>
-                    <button onClick={() => deleteColumn(column.id)}>supprimer</button>
-                    <input
-                        value={newCard[column.id] || ''}
-                        onChange={e => setNewCard(prev => ({ ...prev, [column.id]: e.target.value }))}
-                        placeholder="Nouvelle carte"
-                    />
-                    <button onClick={() => createCard(column.id)}>Ajouter une carte</button>
-
-
-                    {cards.filter(c => c.column_id === column.id)
-                        .map(card => (
-                            <Card
-                                key={card.id}
-                                card={card}
-                                onUpdate={updateCard}
-                                onDelete={deleteCard}
-                            />
-                        ))}
-                </div>
-            ))}
+            <button onClick={() => setOpenModalColumn(true)} className="btn-new-column">Nouvelle colonne</button>
+            {modalOpenColumn && (
+                <Modal onClose={() => setOpenModalColumn(false)}>
+                    <input value={newColumn} onChange={e => setNewColumn(e.target.value)}></input>
+                    <button onClick={createColumn}>Ajouter</button>
+                </Modal>
+            )}
+            <div className="container-column">
+                {columns.map(column => (
+                    <div key={column.id} className="column">
+                        <h2>{column.name}</h2>
+                        <button onClick={() => updateColumn(column.id)} className="btn btn-column">modifier</button>
+                        <button onClick={() => deleteColumn(column.id)} className="btn btn-column">supprimer</button>
+                        <button onClick={() => setOpenModalCard(column.id)} className="btn btn-card">Ajouter une tâche</button>
+                        {modalOpenCard === column.id && (
+                            <Modal onClose={() => setOpenModalCard(false)}>
+                                <input
+                                    value={newCard[column.id] || ''}
+                                    onChange={e => setNewCard(prev => ({ ...prev, [column.id]: e.target.value }))}
+                                    placeholder="Nouvelle carte"
+                                />
+                                <button onClick={() => createCard(column.id)} className="btn btn-card">Ajouter une tâche </button>
+                            </Modal>
+                        )}
+                        <div className="cards">
+                            {cards.filter(c => c.column_id === column.id)
+                                .map(card => (
+                                    <Card
+                                        key={card.id}
+                                        card={card}
+                                        onUpdate={updateCard}
+                                        onDelete={deleteCard}
+                                    />
+                                ))}
+                        </div>
+                    </div>
+                ))}
+            </div>
         </>
     )
 }
