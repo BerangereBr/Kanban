@@ -35,15 +35,16 @@ function Column() {
     };
 
     const createCard = async (columnId) => {
-        if (!newCard[columnId]) return;
+        const cardData = newCard[columnId];
+        if (!cardData?.name) return;
         const res = await fetch('http://localhost:4000/api/card', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ name: newCard[columnId], description: '', column_id: columnId })
+            body: JSON.stringify({ name: cardData.name, description: cardData.description, column_id: columnId })
         })
         const card = await res.json();
         setCards(prev => [...prev, card]);
-        setNewCard(prev => ({ ...prev, [columnId]: '' }))
+        setNewCard(prev => ({ ...prev, [columnId]: {} }));
         setOpenModalCard(false);
     }
 
@@ -101,10 +102,15 @@ function Column() {
                         {modalOpenCard === column.id && (
                             <Modal onClose={() => setOpenModalCard(false)}>
                                 <input
-                                    value={newCard[column.id] || ''}
-                                    onChange={e => setNewCard(prev => ({ ...prev, [column.id]: e.target.value }))}
-                                    placeholder="Nouvelle carte"
+                                    value={newCard[column.id]?.name || ''}
+                                    onChange={e => setNewCard(prev => ({ ...prev, [column.id]: { ...prev[column.id], name: e.target.value } }))}
+                                    placeholder="Nouvelle tâche"
                                 />
+                                <input value={newCard[column.id]?.description || ''}
+                                    onChange={e => setNewCard(prev => ({
+                                        ...prev, [column.id]: { ...prev[column.id], description: e.target.value },
+                                    }))
+                                    }></input>
                                 <button onClick={() => createCard(column.id)} className="btn btn-card">Ajouter une tâche </button>
                             </Modal>
                         )}
