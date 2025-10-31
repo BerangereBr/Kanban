@@ -10,6 +10,9 @@ function Column() {
     const [newCard, setNewCard] = useState({});
     const [modalOpenColumn, setOpenModalColumn] = useState(false);
     const [modalOpenCard, setOpenModalCard] = useState(null);
+    const [modalOpenNewName, setOpenModalNewname] = useState(null);
+    const [newName, setNewName] = useState('');
+
 
     useEffect(() => {
         fetch('http://localhost:4000/api/column')
@@ -48,8 +51,7 @@ function Column() {
         setOpenModalCard(false);
     }
 
-    const updateColumn = async (id) => {
-        const newName = prompt('nouveau nom :');
+    const updateColumn = async (id, newName) => {
         if (!newName) return;
         const res = await fetch(`http://localhost:4000/api/column/${id}`, {
             method: 'PUT',
@@ -57,7 +59,9 @@ function Column() {
             body: JSON.stringify({ name: newName })
         });
         const updated = await res.json();
-        setColumns(prev => prev.map(c => c.id === id ? updated : c));
+        setColumns(prev => prev.map(c => c.id === id ? { ...c, name: updated.name } : c));
+        setOpenModalNewname(null);
+        setNewName("");
     }
 
     const updateCard = async (id, data) => {
@@ -89,14 +93,21 @@ function Column() {
             {modalOpenColumn && (
                 <Modal onClose={() => setOpenModalColumn(false)}>
                     <input value={newColumn} onChange={e => setNewColumn(e.target.value)}></input>
-                    <button onClick={createColumn} className="btn btn-column">Ajouter</button>
+                    <button onClick={() => createColumn()} className="btn btn-column">Ajouter</button>
                 </Modal>
             )}
             <div className="container-column">
                 {columns.map(column => (
                     <div key={column.id} className="column">
                         <h2>{column.name}</h2>
-                        <button onClick={() => updateColumn(column.id)} className="btn btn-column">modifier</button>
+                        <button onClick={() => { setOpenModalNewname(column.id); setNewName(column.name) }}>modifier</button>
+                        {modalOpenNewName === column.id && (
+                            <Modal onClose={() => setOpenModalNewname(null)}>
+                                <h3>Modifier le nom</h3>
+                                <input value={newName} onChange={e => setNewName(e.target.value)}></input>
+                                <button onClick={() => updateColumn(column.id, newName)} className="btn btn-column">valider</button>
+                            </Modal>
+                        )}
                         <button onClick={() => deleteColumn(column.id)} className="btn btn-column">supprimer</button>
                         <button onClick={() => setOpenModalCard(column.id)} className="btn btn-card">Ajouter une tâche</button>
                         {modalOpenCard === column.id && (
