@@ -92,37 +92,43 @@ function Column() {
             <button onClick={() => setOpenModalColumn(true)} className="btn-new-column">Nouvelle colonne</button>
             {modalOpenColumn && (
                 <Modal onClose={() => setOpenModalColumn(false)}>
-                    <input value={newColumn} onChange={e => setNewColumn(e.target.value)}></input>
-                    <button onClick={() => createColumn()} className="btn btn-column">Ajouter</button>
+                    <form onSubmit={() => createColumn()}>
+                        <input value={newColumn} onChange={e => setNewColumn(e.target.value)}></input>
+                        <button className="btn btn-column">Ajouter</button>
+                    </form>
                 </Modal>
             )}
             <div className="container-column">
                 {columns.map(column => (
                     <div key={column.id} className="column">
                         <h2>{column.name}</h2>
-                        <button onClick={() => { setOpenModalNewname(column.id); setNewName(column.name) }}>modifier</button>
+                        <button onClick={() => { setOpenModalNewname(column.id); setNewName(column.name) }} className="btn btn-column">modifier</button>
                         {modalOpenNewName === column.id && (
                             <Modal onClose={() => setOpenModalNewname(null)}>
-                                <h3>Modifier le nom</h3>
-                                <input value={newName} onChange={e => setNewName(e.target.value)}></input>
-                                <button onClick={() => updateColumn(column.id, newName)} className="btn btn-column">valider</button>
+                                <form onSubmit={() => updateColumn(column.id, newName)}>
+                                    <h3>Modifier le nom</h3>
+                                    <input value={newName} onChange={e => setNewName(e.target.value)}></input>
+                                    <button className="btn btn-column">valider</button>
+                                </form>
                             </Modal>
                         )}
                         <button onClick={() => deleteColumn(column.id)} className="btn btn-column">supprimer</button>
                         <button onClick={() => setOpenModalCard(column.id)} className="btn btn-card">Ajouter une tâche</button>
                         {modalOpenCard === column.id && (
                             <Modal onClose={() => setOpenModalCard(false)}>
-                                <input
-                                    value={newCard[column.id]?.name || ''}
-                                    onChange={e => setNewCard(prev => ({ ...prev, [column.id]: { ...prev[column.id], name: e.target.value } }))}
-                                    placeholder="Nouvelle tâche"
-                                />
-                                <input value={newCard[column.id]?.description || ''}
-                                    onChange={e => setNewCard(prev => ({
-                                        ...prev, [column.id]: { ...prev[column.id], description: e.target.value },
-                                    }))
-                                    }></input>
-                                <button onClick={() => createCard(column.id)} className="btn btn-card">Ajouter une tâche </button>
+                                <form onSubmit={() => createCard(column.id)}>
+                                    <input
+                                        value={newCard[column.id]?.name || ''}
+                                        onChange={e => setNewCard(prev => ({ ...prev, [column.id]: { ...prev[column.id], name: e.target.value } }))}
+                                        placeholder="Nouvelle tâche"
+                                    />
+                                    <input value={newCard[column.id]?.description || ''}
+                                        onChange={e => setNewCard(prev => ({
+                                            ...prev, [column.id]: { ...prev[column.id], description: e.target.value },
+                                        }))
+                                        }></input>
+                                    <button className="btn btn-card">Ajouter une tâche </button>
+                                </form>
                             </Modal>
                         )}
                         <div className="cards">
