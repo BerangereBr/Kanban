@@ -89,7 +89,7 @@ function Column() {
             {modalOpenColumn && (
                 <Modal onClose={() => setOpenModalColumn(false)}>
                     <input value={newColumn} onChange={e => setNewColumn(e.target.value)}></input>
-                    <button onClick={createColumn}>Ajouter</button>
+                    <button onClick={createColumn} className="btn btn-column">Ajouter</button>
                 </Modal>
             )}
             <div className="container-column">

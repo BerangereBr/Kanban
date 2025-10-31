@@ -10,15 +10,17 @@
     bottom: 0;
     left: 0;
     z-index: 1000;
+    background-color: rgba(variables.$bg-color, 0.6);
 
     div {
         display: flex;
+        flex-direction: column;
         justify-content: center;
         align-items: center;
         background-color: variables.$solid-color;
         width: 50%;
         height: 50%;
         border-radius: variables.$border-radius;
-
+        gap: 20px;
     }
 }
