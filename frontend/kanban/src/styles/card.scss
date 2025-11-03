@@ -9,7 +9,25 @@
     border-radius: variables.$border-radius;
     padding: 20px;
 
-    .description {
+    .card-supr {
+        display: flex;
+        justify-content: flex-end;
+        width: 100%;
+
+        .card-btn-supr {
+            color: variables.$text-color;
+            border: none;
+            background-color: transparent;
+            cursor: pointer;
+        }
+    }
+
+    .card-name {
+        text-align: center;
+        margin: 0;
+    }
+
+    .card-description {
         text-align: center;
     }
 }
