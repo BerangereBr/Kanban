@@ -61,7 +61,7 @@ export default function API() {
                 return;
             }
             const updated = await res.json();
-            setColumns(prev => prev.map(c => c.id === id ? updated : c));
+            setColumns(prev => prev.map(c => c.id === id ? { ...c, name: updated.name || name } : c));
             return updated;
         } catch (err) {
             console.error("updateColumn network error:", err);
@@ -108,6 +108,9 @@ export default function API() {
 
     const updateCard = async (id, data) => {
         if (!id) return;
+        setCards(prev =>
+            prev.map(c => (c.id === id ? { ...c, ...data } : c))
+        );
         try {
             const res = await fetch(`${API_BASE}/card/${id}`, {
                 method: "PUT",
@@ -118,9 +121,7 @@ export default function API() {
                 console.error("updateCard backend error");
                 return;
             }
-            const updated = await res.json();
-            setCards(prev => prev.map(c => c.id === id ? updated : c));
-            return updated;
+            return true;
         } catch (err) {
             console.error("updateCard network error:", err);
         }

@@ -1,6 +1,7 @@
 import { useState } from "react";
 import Card from "./Card";
 import Modal from "./Modal";
+import { Droppable, Draggable } from "@hello-pangea/dnd";
 
 function Column({ column, cards, updateColumn, deleteColumn, createCard, deleteCard }) {
     const [modalEdit, setModalEdit] = useState(false);
@@ -20,7 +21,10 @@ function Column({ column, cards, updateColumn, deleteColumn, createCard, deleteC
         setNewCard({ name: "", description: "" });
         setModalNewCard(false);
     };
+    const columnCards = cards
+        .filter(c => Number(c.column_id) === Number(column.id));
 
+    console.log("Colonne:", column.id, "Cartes filtrées:", cards.filter(c => Number(c.column_id) === Number(column.id)));
     return (
         <div className="column">
             <h2>{column.name}</h2>
@@ -57,13 +61,27 @@ function Column({ column, cards, updateColumn, deleteColumn, createCard, deleteC
                 </Modal>
             )}
 
-            <div className="cards">
-                {cards.map(card => (
-                    <Card key={card.id} card={card} onDelete={deleteCard} />
-                ))}
-            </div>
+            <Droppable droppableId={column.id.toString()}>
+                {(provided) => (
+                    <div ref={provided.innerRef} {...provided.droppableProps} className="cards">
+                        {columnCards.map((card, index) => (
+                            <Draggable key={card.id} draggableId={card.id.toString()} index={index}>
+                                {(provided) => (
+                                    <div
+                                        ref={provided.innerRef}
+                                        {...provided.draggableProps}
+                                        {...provided.dragHandleProps}
+                                    >
+                                        <Card card={card} onDelete={deleteCard} />
+                                    </div>
+                                )}
+                            </Draggable>
+                        ))}
+                        {provided.placeholder}
+                    </div>
+                )}
+            </Droppable>
         </div>
     );
 }
-
 export default Column;
