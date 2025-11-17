@@ -14,16 +14,41 @@
     }
 }
 
-.btn {
-    border-radius: variables.$btn;
-    background-color: white;
-    border: 2px solid variables.$solid-color;
-    cursor: pointer;
+.column-btn-container {
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-end;
 
-    &:hover {
-        background-color: variables.$solid-color;
-        color: white;
+    .btn-column {
+        background-color: transparent;
     }
+
+    img {
+        width: 30px;
+    }
+}
+
+.column-btn-name {
+    display: flex;
+    flex-direction: row;
+}
+
+.btn-card {
+    background-color: transparent;
+
+    img {
+        width: 30px;
+    }
+}
+
+.btn-modal {
+    background-color: white;
+    border-radius: variables.$border-radius;
+}
+
+.btn {
+    border: none;
+    cursor: pointer;
 }
 
 .container-column {

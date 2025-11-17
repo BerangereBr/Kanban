@@ -72,7 +72,7 @@ function Columns() {
                     <Modal onClose={() => setOpenModalColumn(false)}>
                         <form onSubmit={(e) => handleSubmit(e)}>
                             <input value={newColumn} onChange={e => setNewColumn(e.target.value)}></input>
-                            <button className="btn btn-column">Ajouter</button>
+                            <button className="btn btn-modal">Ajouter</button>
                         </form>
                     </Modal>
                 )}
