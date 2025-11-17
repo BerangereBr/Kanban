@@ -81,12 +81,12 @@ export const createCard = (req, res) => {
 
 export const updateCard = (req, res) => {
     const { id } = req.params;
-    const { name, description } = req.body;
+    const { name, description, column_id } = req.body;
 
     if (!id) return res.status(400).json({ error: 'Pas d’ID de carte fourni' });
 
 
-    db.query('UPDATE cards SET name = COALESCE (?, name), description = COALESCE(?, description) WHERE id = ?', [name, description, id], (err, result) => {
+    db.query('UPDATE cards SET name = COALESCE(?, name), description = COALESCE(?, description),  column_id = COALESCE(?, column_id) WHERE id = ?', [name, description, column_id, id], (err, result) => {
         if (err) {
             console.error(err);
             return res.status(500).json({ error: 'Erreur serveur' });
@@ -96,7 +96,7 @@ export const updateCard = (req, res) => {
             return res.status(404).json({ error: 'Carte non trouvée' });
         }
 
-        res.status(200).json({ id, name, description });
+        res.status(200).json({ id, name, description, column_id });
     });
 };
 

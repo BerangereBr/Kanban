@@ -79,7 +79,7 @@ export default function API() {
             // ne supprimer que la colonne ciblée
             setColumns(prev => prev.filter(c => c.id !== id));
             // supprimer les cartes liées
-            setCards(prev => prev.filter(card => card.column_id !== id));
+            setCards(prev => prev.filter(card => card.columnId !== id));
         } catch (err) {
             console.error("deleteColumn network error:", err);
         }
@@ -99,8 +99,9 @@ export default function API() {
                 return;
             }
             const newCard = await res.json();
-            setCards(prev => [...prev, newCard]);
-            return newCard;
+            const cardWithColumnId = { ...newCard, columnId: newCard.column_id };
+            setCards(prev => [...prev, cardWithColumnId]);
+            return cardWithColumnId;
         } catch (err) {
             console.error("createCard network error:", err);
         }
@@ -108,9 +109,6 @@ export default function API() {
 
     const updateCard = async (id, data) => {
         if (!id) return;
-        setCards(prev =>
-            prev.map(c => (c.id === id ? { ...c, ...data } : c))
-        );
         try {
             const res = await fetch(`${API_BASE}/card/${id}`, {
                 method: "PUT",
@@ -121,7 +119,12 @@ export default function API() {
                 console.error("updateCard backend error");
                 return;
             }
-            return true;
+            const updated = await res.json();
+            const updatedCard = { ...updated, columnId: updated.column_id };
+            setCards(prev =>
+                prev.map(c => (c.id === id ? { ...c, ...updatedCard } : c))
+            );
+            return updatedCard;
         } catch (err) {
             console.error("updateCard network error:", err);
         }

@@ -15,7 +15,11 @@ function Columns() {
 
     //  Synchronise quand API change 
     useEffect(() => {
-        setLocalCards(cards);
+        const mappedCards = cards.map(card => ({
+            ...card,
+            columnId: card.column_id
+        }));
+        setLocalCards(mappedCards);
     }, [cards]);
 
 
@@ -26,6 +30,7 @@ function Columns() {
         setNewColumn("");
         setOpenModalColumn(false);
     };
+
     const onDragEnd = async (result) => {
         const { destination, source, draggableId } = result;
         if (!destination) return;
@@ -37,18 +42,27 @@ function Columns() {
         const movedCardId = Number(draggableId);
         const toColumnId = Number(destination.droppableId);
 
-        //  mise à jour locale
+        const res = await updateCard(movedCardId, { column_id: toColumnId });
+        if (!res) return;
+
+        // Met à jour le state local avec toute la carte renvoyée
         setLocalCards(prev =>
             prev.map(card =>
-                card.id === movedCardId ? { ...card, column_id: toColumnId } : card
+                card.id === movedCardId
+                    ? { ...card, columnId: res.column_id, name: res.name, description: res.description }
+                    : card
             )
         );
-
-        //  mise à jour backend
-        await updateCard(movedCardId, { column_id: toColumnId });
     };
 
+    const handleCreateCard = async (columnId, newCard) => {
+        const createdCard = await createCard(columnId, newCard);
+        if (!createdCard) return;
 
+        const cardWithColumnId = { ...createdCard, columnId: createdCard.column_id };
+
+        setLocalCards(prev => [...prev, cardWithColumnId]);
+    };
 
     return (
         <>
@@ -72,7 +86,7 @@ function Columns() {
                             cards={localCards}
                             updateColumn={updateColumn}
                             deleteColumn={deleteColumn}
-                            createCard={createCard}
+                            createCard={handleCreateCard}
                             updateCard={updateCard}
                             deleteCard={deleteCard} />
                     ))}

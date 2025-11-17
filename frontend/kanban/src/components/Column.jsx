@@ -15,16 +15,16 @@ function Column({ column, cards, updateColumn, deleteColumn, createCard, deleteC
         setModalEdit(false);
     };
 
-    const handleCreateCard = (e) => {
+    const handleCreateCard = async (e) => {
         e.preventDefault();
         createCard(column.id, newCard);
         setNewCard({ name: "", description: "" });
         setModalNewCard(false);
     };
-    const columnCards = cards
-        .filter(c => Number(c.column_id) === Number(column.id));
 
-    console.log("Colonne:", column.id, "Cartes filtrées:", cards.filter(c => Number(c.column_id) === Number(column.id)));
+    const columnCards = cards
+        .filter(c => Number(c.columnId) === Number(column.id));
+
     return (
         <div className="column">
             <h2>{column.name}</h2>
