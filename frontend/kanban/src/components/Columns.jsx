@@ -48,9 +48,7 @@ function Columns() {
         // Met à jour le state local avec toute la carte renvoyée
         setLocalCards(prev =>
             prev.map(card =>
-                card.id === movedCardId
-                    ? { ...card, columnId: res.column_id, name: res.name, description: res.description }
-                    : card
+                card.id === movedCardId ? res : card
             )
         );
     };

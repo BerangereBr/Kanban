@@ -96,7 +96,17 @@ export const updateCard = (req, res) => {
             return res.status(404).json({ error: 'Carte non trouvée' });
         }
 
-        res.status(200).json({ id, name, description, column_id });
+        db.query(
+            "SELECT * FROM cards WHERE id = ?",
+            [id],
+            (err2, rows) => {
+                if (err2) {
+                    console.error(err2);
+                    return res.status(500).json({ error: "Erreur serveur" });
+                }
+                res.status(200).json(rows[0]);
+            }
+        );
     });
 };
 

@@ -117,13 +117,10 @@ export default function API() {
             });
             if (!res.ok) {
                 console.error("updateCard backend error");
-                return;
+                return null;
             }
             const updated = await res.json();
             const updatedCard = { ...updated, columnId: updated.column_id };
-            setCards(prev =>
-                prev.map(c => (c.id === id ? { ...c, ...updatedCard } : c))
-            );
             return updatedCard;
         } catch (err) {
             console.error("updateCard network error:", err);
