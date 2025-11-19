@@ -1,15 +1,17 @@
-import Header from "./components/Header"
-import Columns from "./components/Columns"
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import SignIn from './pages/SignIn';
+import Dashboard from './pages/Dashboard';
 
-function App() {
-  return (
-    <>
-      <Header />
-      <main>
-        <Columns />
-      </main>
-    </>
-  )
-}
+const App = () => {
+    return (
+        <Router>
+            <Routes>
+                <Route path="/signin" element={<SignIn />} />
+                <Route path="/dashboard" element={<Dashboard />} />
+                <Route path="/" element={<Navigate to="/dashboard" replace />} />
+            </Routes>
+        </Router>
+    );
+};
 
-export default App
+export default App;

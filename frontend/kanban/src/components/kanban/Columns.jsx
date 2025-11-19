@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import API from "./Api";
 import Modal from "./Modal";
 import Column from "./Column";
-import '../styles/column.scss';
+import '../../styles/column.scss';
 import { DragDropContext } from "@hello-pangea/dnd";
 
 function Columns() {

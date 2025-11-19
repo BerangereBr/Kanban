@@ -1,5 +1,6 @@
 import { db } from '../config/db.js';
 const bcrypt = require('bcrypt');
+import { generateToken } from '../utils/jwtUtils.js';
 
 export const newUser = (req, res) => {
     const { email, password } = req.body;
@@ -54,13 +55,21 @@ export const signIn = (req, res) => {
         const user = result[0];
         bcrypt.compare(password, user.password, (err, isPasswordValid) => {
             if (err) {
-                console.error(err);
+                console.error('Erreur lors de la comparaison des mots de passe :', err);
                 return res.status(500).json({ error: 'Erreur serveur' });
             }
 
             if (!isPasswordValid) {
                 return res.status(401).json({ error: 'Email ou mot de passe incorrect' });
             }
+
+            const token = generateToken(user)
+            res.cookie('token', token, {
+                httpOnly: true,
+                secure: true,
+                sameSite: 'strict',
+                maxAge: 3600000
+            });
             res.status(200).json({
                 message: 'Connexion réussie',
                 user: { id: user.id, email: user.email }

@@ -1,12 +1,12 @@
 import { useState } from "react";
 import Card from "./Card";
 import Modal from "./Modal";
-import deleteColumnIcon from '../assets/icons/deleteColumn.png';
-import deleteColumnHover from '../assets/icons/deleteColumnHover.png';
-import modifyColumnIcon from '../assets/icons/modifyColumn.png';
-import modifyColumnHover from '../assets/icons/modifyColumnHover.png';
-import addCardIcon from '../assets/icons/addCard.png';
-import addCardHover from '../assets/icons/addCardHover.png';
+import deleteColumnIcon from '../../assets/icons/deleteColumn.png';
+import deleteColumnHover from '../../assets/icons/deleteColumnHover.png';
+import modifyColumnIcon from '../../assets/icons/modifyColumn.png';
+import modifyColumnHover from '../../assets/icons/modifyColumnHover.png';
+import addCardIcon from '../../assets/icons/addCard.png';
+import addCardHover from '../../assets/icons/addCardHover.png';
 import { Droppable, Draggable } from "@hello-pangea/dnd";
 
 function Column({ column, cards, updateColumn, deleteColumn, createCard, deleteCard }) {

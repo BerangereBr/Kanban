@@ -3,6 +3,7 @@ import helmet from 'helmet';
 import cors from 'cors';
 import http from 'http';
 import dotenv from 'dotenv';
+import cookieParser from 'cookie-parser';
 import routeKanban from './routes/routeKanban.js';
 import './config/db.js';
 
@@ -15,6 +16,7 @@ const corsOption = {
 }
 
 app.use(express.json());
+app.use(cookieParser())
 app.use(helmet());
 app.use(cors(corsOption));
 app.use('/api', routeKanban);

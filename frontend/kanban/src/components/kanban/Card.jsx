@@ -1,6 +1,6 @@
-import '../styles/card.scss';
-import deleteIcon from '../assets/icons/delete.png';
-import deleteIconHover from '../assets/icons/deleteHover.png'
+import '../../styles/card.scss';
+import deleteIcon from '../../assets/icons/delete.png';
+import deleteIconHover from '../../assets/icons/deleteHover.png'
 import { useState } from 'react';
 
 function Card({ card, onDelete }) {
