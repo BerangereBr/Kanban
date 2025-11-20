@@ -1,6 +1,5 @@
 import express from 'express';
 import { getColumns, createColumn, updateColumn, deleteColumn, getCard, createCard, updateCard, deleteCard } from '../controllers/controllerKanban.js';
-import { authToken } from '../middleware/auth.js';
 
 const router = express.Router();
 
